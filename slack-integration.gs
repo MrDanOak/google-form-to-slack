@@ -32,8 +32,8 @@ const ignoredColumns = [];
 
 // In the Script Editor, run initialize() at least once to make your code execute on form submit
 function initialize() {
-  var triggers = ScriptApp.getProjectTriggers();
-  triggers.forEach((trigger) => ScriptApp.deleteTrigger(trigger));
+  ScriptApp.getProjectTriggers()
+    .forEach((trigger) => ScriptApp.deleteTrigger(trigger));
   
   ScriptApp.newTrigger("submitValuesToSlack")
     .forSpreadsheet(SpreadsheetApp.getActiveSpreadsheet())
@@ -43,15 +43,13 @@ function initialize() {
 
 // Running the code in initialize() will cause this function to be triggered this on every Form Submit
 function submitValuesToSlack(e) {
-  
-  const attachments = constructAttachments(e.values);
 
   const payload = {
     "channel": postChannel,
     "username": postUser,
     "icon_emoji": postIcon,
     "link_names": 1,
-    "attachments": attachments
+    "attachments": constructAttachments(e.values)
   };
 
   const options = {
